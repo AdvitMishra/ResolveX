@@ -1,0 +1,13 @@
+# Judge demo checklist
+- [ ] Open dashboard at http://127.0.0.1:5050
+- [ ] Explain AURQENT is the team; ResolveX AI is the project
+- [ ] Show the actual Switch room and live agent sessions
+- [ ] Report the checkout bug in the shared room
+- [ ] Show triage and investigation handoff
+- [ ] Show the exact code diff and real test output
+- [ ] Show failing pytest run before the patch
+- [ ] Show human approval in the room
+- [ ] Apply the patch in an isolated repository/branch
+- [ ] Show all four tests passing
+- [ ] Explain that merge/deploy needs human approval
+- [ ] Show README and reproducible Switch room template

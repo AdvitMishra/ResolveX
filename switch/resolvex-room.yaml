@@ -1,0 +1,76 @@
+version: 1
+params:
+  team:
+    type: string
+    default: aurqent
+    pattern: "[a-z][a-z0-9-]*"
+  provider:
+    type: provider
+    default: [codex]
+  bridge:
+    type: bridge
+    default: [$first]
+  triage_location:
+    type: location
+    input: advanced
+  triage_directory:
+    type: directory
+    default: "{$agents_dir}/resolvex-triage"
+    input: advanced
+  fix_location:
+    type: location
+    input: advanced
+  fix_directory:
+    type: directory
+    default: "{$agents_dir}/resolvex-fix"
+    input: advanced
+agents:
+  - name: "{team}-triage"
+    description: "Classifies incidents and prepares handoffs"
+    provider: "{provider}"
+    location: "{triage_location}"
+    directory: "{triage_directory}"
+    addressing: anyone
+    auto_mode: true
+    auto_approve: false
+    instructions: |
+      Classify each report as bug, question or request. State severity and reason,
+      affected service, missing evidence and next safe action. Separate facts from
+      hypotheses. Never claim to inspect logs or code unless you actually did.
+      Do not edit files or deploy.
+  - name: "{team}-fix"
+    description: "Investigates repository, proposes a patch and runs tests"
+    provider: "{provider}"
+    location: "{fix_location}"
+    directory: "{fix_directory}"
+    addressing: owner-agents
+    auto_mode: true
+    auto_approve: false
+    instructions: |
+      Work only in the repository directory. Reproduce the issue first. Identify
+      root cause with file paths. Make the smallest safe change on an isolated
+      branch. Run relevant tests and paste exact commands, exit codes and output.
+      Never open a PR, merge, release or deploy. Ask for human approval first.
+      Never claim tests passed unless you ran them.
+room:
+  name: "{team}-resolvex"
+  bridge: "{bridge}"
+  agents: ["{team}-triage", "{team}-fix"]
+  users: ["{$creator}"]
+  aliases:
+    "{team}-triage": triage
+    "{team}-fix": fix
+  instructions: |
+    This room is the source of truth for ResolveX incidents. Humans own priorities
+    and final decisions. Agents distinguish facts from hypotheses and paste real
+    command output. No PR, merge, release or deployment without explicit human
+    approval in this room. Keep work on an isolated branch. Never share secrets
+    or production customer data.
+  roles:
+    - name: approver
+      exclusive: true
+      instructions: Review evidence, patch diff and exact test output. Approve only
+        when evidence is sufficient; state a reason when rejecting.
+kickoff: |
+  @triage and @fix: introduce your role, what you can do, what you will not do,
+  and the evidence you need. Humans: report the sample checkout incident.

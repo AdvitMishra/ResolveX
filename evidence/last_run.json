@@ -1,0 +1,14 @@
+{
+  "time": "2026-11-07T09:55:13",
+  "passed": 2,
+  "failed": 2,
+  "verdict": "NOT VERIFIED",
+  "tail": [
+    "",
+    "tests\\test_checkout.py:13: AssertionError",
+    "=========================== short test summary info ===========================",
+    "FAILED tests/test_checkout.py::test_shipping_at_threshold - assert (49 == 0)",
+    "FAILED tests/test_checkout.py::test_shipping_above_threshold - assert (49 == 0)",
+    "2 failed, 2 passed in 0.08s"
+  ]
+}
